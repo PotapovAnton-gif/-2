@@ -4,12 +4,10 @@ using namespace std;
 
 class elem {
 
-private:
-
-elem* p;
+public:
+	elem* p;
 int data;
 elem* next;
-public:
 	
 	elem() {
 		p = new elem;
@@ -59,76 +57,100 @@ public:
 };
 
 
-class list:public Container{
+class list : public Container{
 
 private:
 
+	struct elem
+	{
+		int data;
+		elem* next;
+	};
 	elem* root;
-
 public:
 
-	list(int data_root) {
-		root = new elem(data_root);
-	}
-
-	~list() {
-		delete root;
-	}
-
-	void print() {
-		elem* temp = root;
-		while (temp != NULL) {
-			cout << temp->give_data();
-			temp = temp->give_next();
-		}
-	}
-
-	void insert(int value) {
-		
-		elem* new_ = new elem;
-		elem* temp = root->give_next();
-		
-		root->change(new_);
-		new_->change(temp);
-		new_->change(value);
+	list(int data_root);
 	
-	}
+	~list();
+
+	void print () {
 	
-	bool exists(int data) {
-		
 		elem* temp = root;
-		
-		while (temp->give_data() != data && temp != NULL)
-			temp = temp->give_next();
-		
-		if(temp == NULL) {
-			return 0;
-		} else {
-			return 1;
-		}
-				
-	}
-	void remove(int data) {
-		
-		elem* temp = root;
-		elem* priv = root;
-
-		while (temp->give_data() != data && temp!= NULL) {
-			priv = temp;
-			temp = temp->give_next();
-		}
-
-		if (temp != NULL) {
-			priv->change(temp->give_next());
-			delete temp;
+	
+		while (temp != nullptr) {
+			cout << temp->data << endl;
+			temp = temp->next;
 		}
 	
 	}
 
+	void remove(int value) {
+	
+		int i = 1;
+	
+		elem* that = root->next;
+	
+		elem* prev = root;
+	
+		while (that->data != value && that->next != nullptr) {
+			prev = prev->next;
+			that = that->next;
+		}
+			prev->next = that->next;
+			delete[] that;
+	}
+	
+	bool exists(int value) {
+		
+		elem* that = root;
+		
+		while (that->data != value && that->next != nullptr)
+			that = that->next;
+		
+		if (that->data == value)
+			return true;
+		else 
+			return false;
+	}
 
+	void insert (int data) {
+	
+		elem* new_elem = new elem;
+	
+		new_elem->data = data;
+	
+		new_elem->next = root->next;
+	
+		root->next = new_elem;
+	}
 };
 
-int main(int argc, const char** argv) {
+list::list(int data_root) {
+	
+	root = new elem;
+	
+	root->next = nullptr;
+	
+	root->data = data_root;
+
+}
+
+list::~list() {
+	
+	elem* current_elem = root->next;
+	
+	elem* prev_elem = root;
+	
+	while (current_elem->next != nullptr) {
+		delete[] prev_elem;
+		prev_elem = current_elem;
+		current_elem = current_elem->next;
+	}
+	
+		delete[] current_elem;
+		delete[] prev_elem;
+}
+int main() {
 
 Container* c = new list(0);
 
