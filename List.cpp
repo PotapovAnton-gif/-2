@@ -1,52 +1,14 @@
 #include <iostream>
 
 using namespace std;
-
-class elem {
-
-public:
-	elem* p;
-int data;
-elem* next;
-	
-	elem() {
-		p = new elem;
-		p->data = 0;
-		p->next = NULL;
-	}
-
-	elem(int data) {
-		p = new elem;
-		p->data = data;
-	}
-	
-	~elem() {
-		delete p;
-	}
-	
-	elem* give_next() {
-		return next;
-	}
-	int give_data() {
-		return data;
-	}
-	void change(elem* new_next) {
-		next = new_next;
-	}
-
-	void change(int new_data) {
-		data = new_data;
-	}
-
-};
-
-
-class Container {
-
+class Container
+{
 public:
 	// Виртуальные методы, должны быть реализованы вашим контейнером
 	virtual void insert(int value) = 0;
+	
 	virtual bool exists(int value) = 0;
+	
 	virtual void remove(int value) = 0;
 
 	// И этот тоже, хотя к нему потом ещё вернёмся
@@ -55,8 +17,6 @@ public:
 	// Виртуальный деструктор (пока просто поверьте, что он нужен)
 	virtual ~Container() { };
 };
-
-
 class list : public Container{
 
 private:
@@ -97,7 +57,7 @@ public:
 			that = that->next;
 		}
 			prev->next = that->next;
-			delete[] that;
+			delete that;
 	}
 	
 	bool exists(int value) {
@@ -142,15 +102,16 @@ list::~list() {
 	elem* prev_elem = root;
 	
 	while (current_elem->next != nullptr) {
-		delete[] prev_elem;
+		delete prev_elem;
 		prev_elem = current_elem;
 		current_elem = current_elem->next;
 	}
 	
-		delete[] current_elem;
-		delete[] prev_elem;
+		delete current_elem;
+		delete prev_elem;
+
 }
-int main() {
+int main(int argc, const char** argv) {
 
 Container* c = new list(0);
 
