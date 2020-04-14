@@ -1,16 +1,19 @@
 #include <iostream>
 
 using namespace std;
+
+
 template <typename T> 
-class Container
-{
+
+class Container {
+
 public:
 	// Виртуальные методы, должны быть реализованы вашим контейнером
-	virtual void insert(T &value) = 0;
+	virtual void insert(const T &value) = 0;
 	
-	virtual bool exists(T &value) = 0;
-	
-	virtual void remove(T &value) = 0;
+	virtual bool exists(const T &value) = 0;
+	 
+	virtual void remove(const T &value) const = 0;
 
 	// И этот тоже, хотя к нему потом ещё вернёмся
 	virtual void print() = 0;
@@ -19,20 +22,19 @@ public:
 	virtual ~Container() { };
 };
 template <typename T>
-
-class list : public Container{
+class list : public Container<T>{
 
 private:
 
-	struct elem
-	{
+	struct elem {
+		
 		T data;
 		elem* next;
 	};
 	elem* root;
 public:
 
-	list(T &data_root) {
+	list(const T &data_root) {
 
 		root = new elem;
 	
@@ -69,9 +71,7 @@ public:
 	
 	}
 
-	void remove(T &value) {
-	
-		int i = 1;
+	void remove(const T &value) const {
 	
 		elem* that = root->next;
 	
@@ -85,7 +85,7 @@ public:
 			delete that;
 	}
 	
-	bool exists(T &value) {
+	bool exists(const T &value) {
 		
 		elem* that = root;
 		
@@ -110,26 +110,3 @@ public:
 	}
 };
 
-int main(int argc, const char** argv) {
-
-Container<int>* c = new list<int>(0);
-
-    for(int i = 1; i < 10; i++)
-        c->insert(i*i);
-
-    cout << "Container after creation:" << endl;
-    c->print();
-
-    if(c->exists(25))
-        cout << "Search for value 25: found" << endl;
-
-    if(!c->exists(111))
-        cout << "Search for value 111: not found" << endl;
-
-    c->remove(25);
-    cout << "Container after deletion of the element:" << endl;
-    c->print();
-
-    delete c;
-    return 0;
-}
